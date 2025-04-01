@@ -1,0 +1,300 @@
+Quetion number 1:
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create database shoowroom;
+Query OK, 1 row affected (0.01 sec)
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| shoowroom          |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use shoowroom;
+Database changed
+mysql> create table vehicle( vid int, vname varchar(50), price int, discount int, milage int, details varchar(100));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++---------------------+
+| Tables_in_shoowroom |
++---------------------+
+| vehicle             |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> describe vehicle;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| vid      | int          | YES  |     | NULL    |       |
+| vname    | varchar(50)  | YES  |     | NULL    |       |
+| price    | int          | YES  |     | NULL    |       |
+| discount | int          | YES  |     | NULL    |       |
+| milage   | int          | YES  |     | NULL    |       |
+| details  | varchar(100) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+mysql> insert into vehicle values(1,'Activa',80000,10,35,'Two wheeler.Sturdy.Milage 30km'),(2,'Santro',95000,20,20,'Product of Hyandai'),(3,'Yamaha',160000,5,70,'Sturdy and good milage'),(4,'i-10',300000,8,18,'Good small car'),(5,'WaganR',250000,10,25,'Good Milage car'),(6,'Hero Splendor',75000,9,65,'Best bike'),(7,'Royal Enfild',190000,5,40,'a royal bike');
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from vehicle;
++------+---------------+--------+----------+--------+--------------------------------+
+| vid  | vname         | price  | discount | milage | details                        |
++------+---------------+--------+----------+--------+--------------------------------+
+|    1 | Activa        |  80000 |       10 |     35 | Two wheeler.Sturdy.Milage 30km |
+|    2 | Santro        |  95000 |       20 |     20 | Product of Hyandai             |
+|    3 | Yamaha        | 160000 |        5 |     70 | Sturdy and good milage         |
+|    4 | i-10          | 300000 |        8 |     18 | Good small car                 |
+|    5 | WaganR        | 250000 |       10 |     25 | Good Milage car                |
+|    6 | Hero Splendor |  75000 |        9 |     65 | Best bike                      |
+|    7 | Royal Enfild  | 190000 |        5 |     40 | a royal bike                   |
++------+---------------+--------+----------+--------+--------------------------------+
+7 rows in set (0.00 sec)
+
+mysql> create table customer(custid int, cname varchar(20), location varchar(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++---------------------+
+| Tables_in_shoowroom |
++---------------------+
+| customer            |
+| vehicle             |
++---------------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into customer values (1,'Nilima','Pimpri'),(2,'Ganesh','Pune'),(3,'Kishor','Kothrud'),(4,'Priya','Aundh');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from customer;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      1 | Nilima | Pimpri   |
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      4 | Priya  | Aundh    |
++--------+--------+----------+
+4 rows in set (0.00 sec)
+
+
+mysql> create table salesman(sid int, sname varchar(20), city varchar(20), experience int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++---------------------+
+| Tables_in_shoowroom |
++---------------------+
+| customer            |
+| salesman            |
+| vehicle             |
++---------------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into salesman values (10,'Rajesh','Mumbai',5),(11,'seema','pune',8),(12,'shailesh','nagpur',7),(13,'rakhi','pune',2);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from salesman;
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   10 | Rajesh   | Mumbai |          5 |
+|   11 | seema    | pune   |          8 |
+|   12 | shailesh | nagpur |          7 |
+|   13 | rakhi    | pune   |          2 |
++------+----------+--------+------------+
+4 rows in set (0.00 sec)
+
+----------------------------------------------------------------------------------------------------------------------------------
+question number 2:  change vid and vname to Vehicle id , vehicle name;
+
+mysql> select vid as "Vehicle id", vname as "Vehicle name",price,discount,details from vehicle;
++------------+---------------+--------+----------+--------------------------------+
+| Vehicle id | Vehicle name  | price  | discount | details                        |
++------------+---------------+--------+----------+--------------------------------+
+|          1 | Activa        |  80000 |       10 | Two wheeler.Sturdy.Milage 30km |
+|          2 | Santro        |  95000 |       20 | Product of Hyandai             |
+|          3 | Yamaha        | 160000 |        5 | Sturdy and good milage         |
+|          4 | i-10          | 300000 |        8 | Good small car                 |
+|          5 | WaganR        | 250000 |       10 | Good Milage car                |
+|          6 | Hero Splendor |  75000 |        9 | Best bike                      |
+|          7 | Royal Enfild  | 190000 |        5 | a royal bike                   |
++------------+---------------+--------+----------+--------------------------------+
+7 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------------------------
+question number 3: display name of salesman who work in pune.
+
+mysql> select sname from salesman where city='pune';
++-------+
+| sname |
++-------+
+| seema |
+| rakhi |
++-------+
+2 rows in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------------------------------------
+question number 4: delete customer from pimpri area.
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+question number 5: add new customer 
+
+mysql> insert into customer (cname,custid,location) values('Geeta',5,'pimpri'),('raj',6,'Aundh'),('yash',7,'aundh');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from customer;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      1 | Nilima | Pimpri   |
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      4 | Priya  | Aundh    |
+|      5 | Geeta  | pimpri   |
+|      6 | raj    | Aundh    |
+|      7 | yash   | aundh    |
++--------+--------+----------+
+7 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------------------------------------
+question number 6: delete customer from area aundh whose name Priya
+
+---------------------------------------------------------------------------------------------------------------------------------------
+question number 7: display vehicle information royal enfild
+
+mysql> select * from vehicle;
++------+---------------+--------+----------+--------+--------------------------------+
+| vid  | vname         | price  | discount | milage | details                        |
++------+---------------+--------+----------+--------+--------------------------------+
+|    1 | Activa        |  80000 |       10 |     35 | Two wheeler.Sturdy.Milage 30km |
+|    2 | Santro        |  95000 |       20 |     20 | Product of Hyandai             |
+|    3 | Yamaha        | 160000 |        5 |     70 | Sturdy and good milage         |
+|    4 | i-10          | 300000 |        8 |     18 | Good small car                 |
+|    5 | WaganR        | 250000 |       10 |     25 | Good Milage car                |
+|    6 | Hero Splendor |  75000 |        9 |     65 | Best bike                      |
+|    7 | Royal Enfild  | 190000 |        5 |     40 | a royal bike                   |
++------+---------------+--------+----------+--------+--------------------------------+
+7 rows in set (0.00 sec)
+
+mysql> select vname from vehicle where vname="Royal Enfild";
++--------------+
+| vname        |
++--------------+
+| Royal Enfild |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select vid,vname,price,discount,milage,details from vehicle where vname="Royal Enfild";
++------+--------------+--------+----------+--------+--------------+
+| vid  | vname        | price  | discount | milage | details      |
++------+--------------+--------+----------+--------+--------------+
+|    7 | Royal Enfild | 190000 |        5 |     40 | a royal bike |
++------+--------------+--------+----------+--------+--------------+
+1 row in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------------------------------
+question number 8: display all bikes 
+mysql> select vid,vname,price,discount,milage,details from vehicle where milage > 30;
++------+---------------+--------+----------+--------+--------------------------------+
+| vid  | vname         | price  | discount | milage | details                        |
++------+---------------+--------+----------+--------+--------------------------------+
+|    1 | Activa        |  80000 |       10 |     35 | Two wheeler.Sturdy.Milage 30km |
+|    3 | Yamaha        | 160000 |        5 |     70 | Sturdy and good milage         |
+|    6 | Hero Splendor |  75000 |        9 |     65 | Best bike                      |
+|    7 | Royal Enfild  | 190000 |        5 |     40 | a royal bike                   |
++------+---------------+--------+----------+--------+--------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from vehicle where vname IN ('Activa','Yamaha','Hero Splendor','Royal Enfild');
++------+---------------+--------+----------+--------+--------------------------------+
+| vid  | vname         | price  | discount | milage | details                        |
++------+---------------+--------+----------+--------+--------------------------------+
+|    1 | Activa        |  80000 |       10 |     35 | Two wheeler.Sturdy.Milage 30km |
+|    3 | Yamaha        | 160000 |        5 |     70 | Sturdy and good milage         |
+|    6 | Hero Splendor |  75000 |        9 |     65 | Best bike                      |
+|    7 | Royal Enfild  | 190000 |        5 |     40 | a royal bike                   |
++------+---------------+--------+----------+--------+--------------------------------+
+4 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------------------------------------------
+question number 9:
+question number 10:
+----------------------------------------------------------------------------------------------------------------------------------------
+question number 11: display i-10 info
+mysql> select * from vehicle where vname = 'i-10';
++------+-------+--------+----------+--------+----------------+
+| vid  | vname | price  | discount | milage | details        |
++------+-------+--------+----------+--------+----------------+
+|    4 | i-10  | 300000 |        8 |     18 | Good small car |
++------+-------+--------+----------+--------+----------------+
+1 row in set (0.00 sec)
+-----------------------------------------------------------------------------------------------------------------------------------------
+question number 12: display vid vname price details and total price = price - discount;
+mysql> select vid,vname,price, price-discount as "final Price", details from vehicle;
++------+---------------+--------+-------------+--------------------------------+
+| vid  | vname         | price  | final Price | details                        |
++------+---------------+--------+-------------+--------------------------------+
+|    1 | Activa        |  80000 |       79990 | Two wheeler.Sturdy.Milage 30km |
+|    2 | Santro        |  95000 |       94980 | Product of Hyandai             |
+|    3 | Yamaha        | 160000 |      159995 | Sturdy and good milage         |
+|    4 | i-10          | 300000 |      299992 | Good small car                 |
+|    5 | WaganR        | 250000 |      249990 | Good Milage car                |
+|    6 | Hero Splendor |  75000 |       74991 | Best bike                      |
+|    7 | Royal Enfild  | 190000 |      189995 | a royal bike                   |
++------+---------------+--------+-------------+--------------------------------+
+7 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------------------------
+question number 13: display all vehicle less than 100000
+mysql> select * from vehicle where price < 100000;
++------+---------------+-------+----------+--------+--------------------------------+
+| vid  | vname         | price | discount | milage | details                        |
++------+---------------+-------+----------+--------+--------------------------------+
+|    1 | Activa        | 80000 |       10 |     35 | Two wheeler.Sturdy.Milage 30km |
+|    2 | Santro        | 95000 |       20 |     20 | Product of Hyandai             |
+|    6 | Hero Splendor | 75000 |        9 |     65 | Best bike                      |
++------+---------------+-------+----------+--------+--------------------------------+
+3 rows in set (0.00 sec)
+--------------------------------------------------------------------------------------------------------------------------------------
+question number 14: display info of saleman having experience more than 5 yr.
+
+mysql> select * from salesman;
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   10 | Rajesh   | Mumbai |          5 |
+|   11 | seema    | pune   |          8 |
+|   12 | shailesh | nagpur |          7 |
+|   13 | rakhi    | pune   |          2 |
++------+----------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from salesman where experience > 5;
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   11 | seema    | pune   |          8 |
+|   12 | shailesh | nagpur |          7 |
++------+----------+--------+------------+
+2 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------------------------------------
+question number 15: delete table salesman 
+-----------------------------------------------------------------------------------------------------------------------------------------
+question number 16: 
