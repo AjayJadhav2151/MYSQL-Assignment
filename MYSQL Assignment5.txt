@@ -1,0 +1,230 @@
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| office             |
+| performance_schema |
+| shoowroom          |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use shoowroom;
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_shoowroom |
++---------------------+
+| customer            |
+| customer1           |
+| salesman            |
+| vehicle             |
++---------------------+
+4 rows in set (0.00 sec)
+
+mysql> create table cust_vehicle(tid int, custid int, vid int, sid int, buy_price int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into cust_vehicle values(1,1,1,10,75000),(2,1,2,10,79000),(3,2,3,11,80000),(4,3,3,11,75000),(5,3,2,10,800000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from cust_vehicle;
++------+--------+------+------+-----------+
+| tid  | custid | vid  | sid  | buy_price |
++------+--------+------+------+-----------+
+|    1 |      1 |    1 |   10 |     75000 |
+|    2 |      1 |    2 |   10 |     79000 |
+|    3 |      2 |    3 |   11 |     80000 |
+|    4 |      3 |    3 |   11 |     75000 |
+|    5 |      3 |    2 |   10 |    800000 |
++------+--------+------+------+-----------+
+5 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------
+Q no 1: Display tid, custid, customer name and buy_price.
+mysql> select cv.tid, cv.custid, cv.buy_price, c.cname from cust_vehicle cv, customer c;
++------+--------+-----------+--------+
+| tid  | custid | buy_price | cname  |
++------+--------+-----------+--------+
+|    1 |      1 |     75000 | yash   |
+|    1 |      1 |     75000 | raj    |
+|    1 |      1 |     75000 | Kishor |
+|    1 |      1 |     75000 | Ganesh |
+|    2 |      1 |     79000 | yash   |
+|    2 |      1 |     79000 | raj    |
+|    2 |      1 |     79000 | Kishor |
+|    2 |      1 |     79000 | Ganesh |
+|    3 |      2 |     80000 | yash   |
+|    3 |      2 |     80000 | raj    |
+|    3 |      2 |     80000 | Kishor |
+|    3 |      2 |     80000 | Ganesh |
+|    4 |      3 |     75000 | yash   |
+|    4 |      3 |     75000 | raj    |
+|    4 |      3 |     75000 | Kishor |
+|    4 |      3 |     75000 | Ganesh |
+|    5 |      3 |    800000 | yash   |
+|    5 |      3 |    800000 | raj    |
+|    5 |      3 |    800000 | Kishor |
+|    5 |      3 |    800000 | Ganesh |
++------+--------+-----------+--------+
+20 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------------------
+Q no 2: Dispaly tid, custid, customer name, vid, vehicle name, sid, salesmen name and buy_price for vehicle.
+mysql> select cv.tid, cv.custid,c.cname, cv.vid, v.vname, cv.sid, s.sname, cv.buy_price from cust_vehicle cv, customer c, vehicle v, salesman s;
+duplicate occur
+--------------------------------------------------------------------------------------------------------------------------
+Q no 3: List details of employees as ename, deptno,dname,sal,comm.
+mysql> select e.ename, d.deptno, d.dname, e.sal,e.comm from emp e, dept d;
++--------+--------+------------+---------+---------+
+| ename  | deptno | dname      | sal     | comm    |
++--------+--------+------------+---------+---------+
+| SMITH  |     40 | OPERATIONS |  880.00 |    NULL |
+| SMITH  |     30 | SALES      |  880.00 |    NULL |
+| SMITH  |     20 | RESEARCH   |  880.00 |    NULL |
+| SMITH  |     10 | ACCOUNTING |  880.00 |    NULL |
+| ALLEN  |     40 | OPERATIONS | 1760.00 |  300.00 |
+| ALLEN  |     30 | SALES      | 1760.00 |  300.00 |
+| ALLEN  |     20 | RESEARCH   | 1760.00 |  300.00 |
+| ALLEN  |     10 | ACCOUNTING | 1760.00 |  300.00 |
+| WARD   |     40 | OPERATIONS | 1375.00 |  500.00 |
+| WARD   |     30 | SALES      | 1375.00 |  500.00 |
+| WARD   |     20 | RESEARCH   | 1375.00 |  500.00 |
+| WARD   |     10 | ACCOUNTING | 1375.00 |  500.00 |
+| JONES  |     40 | OPERATIONS | 3272.50 |    NULL |
+| JONES  |     30 | SALES      | 3272.50 |    NULL |
+| JONES  |     20 | RESEARCH   | 3272.50 |    NULL |
+| JONES  |     10 | ACCOUNTING | 3272.50 |    NULL |
+| MARTIN |     40 | OPERATIONS | 1375.00 | 1400.00 |
+| MARTIN |     30 | SALES      | 1375.00 | 1400.00 |
+| MARTIN |     20 | RESEARCH   | 1375.00 | 1400.00 |
+| MARTIN |     10 | ACCOUNTING | 1375.00 | 1400.00 |
+| BLAKE  |     40 | OPERATIONS | 3135.00 |    NULL |
+| BLAKE  |     30 | SALES      | 3135.00 |    NULL |
+| BLAKE  |     20 | RESEARCH   | 3135.00 |    NULL |
+| BLAKE  |     10 | ACCOUNTING | 3135.00 |    NULL |
+| CLARK  |     40 | OPERATIONS | 2695.00 |    NULL |
+| CLARK  |     30 | SALES      | 2695.00 |    NULL |
+| CLARK  |     20 | RESEARCH   | 2695.00 |    NULL |
+| CLARK  |     10 | ACCOUNTING | 2695.00 |    NULL |
+| SCOTT  |     40 | OPERATIONS | 3000.00 |    NULL |
+| SCOTT  |     30 | SALES      | 3000.00 |    NULL |
+| SCOTT  |     20 | RESEARCH   | 3000.00 |    NULL |
+| SCOTT  |     10 | ACCOUNTING | 3000.00 |    NULL |
+| KING   |     40 | OPERATIONS | 5500.00 |    NULL |
+| KING   |     30 | SALES      | 5500.00 |    NULL |
+| KING   |     20 | RESEARCH   | 5500.00 |    NULL |
+| KING   |     10 | ACCOUNTING | 5500.00 |    NULL |
+| TURNER |     40 | OPERATIONS | 1650.00 |    0.00 |
+| TURNER |     30 | SALES      | 1650.00 |    0.00 |
+| TURNER |     20 | RESEARCH   | 1650.00 |    0.00 |
+| TURNER |     10 | ACCOUNTING | 1650.00 |    0.00 |
+| ADAMS  |     40 | OPERATIONS | 1100.00 |    NULL |
+| ADAMS  |     30 | SALES      | 1100.00 |    NULL |
+| ADAMS  |     20 | RESEARCH   | 1100.00 |    NULL |
+| ADAMS  |     10 | ACCOUNTING | 1100.00 |    NULL |
+| JAMES  |     40 | OPERATIONS | 1045.00 |    NULL |
+| JAMES  |     30 | SALES      | 1045.00 |    NULL |
+| JAMES  |     20 | RESEARCH   | 1045.00 |    NULL |
+| JAMES  |     10 | ACCOUNTING | 1045.00 |    NULL |
+| FORD   |     40 | OPERATIONS | 3300.00 |    NULL |
+| FORD   |     30 | SALES      | 3300.00 |    NULL |
+| FORD   |     20 | RESEARCH   | 3300.00 |    NULL |
+| FORD   |     10 | ACCOUNTING | 3300.00 |    NULL |
+| MILLER |     40 | OPERATIONS | 1430.00 |    NULL |
+| MILLER |     30 | SALES      | 1430.00 |    NULL |
+| MILLER |     20 | RESEARCH   | 1430.00 |    NULL |
+| MILLER |     10 | ACCOUNTING | 1430.00 |    NULL |
++--------+--------+------------+---------+---------+
+56 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------------
+Q no 4:Display details of employees as empno, ename, sal, job, deptno and dept name for all employees working as a clerk or salesman and earning sal >2000.
+mysql> select e.empno, e.ename, e.sal, e.job, e.deptno, d.dname from emp e, dept d where job in ('clerk','salesman') and sal>2000;
+Empty set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------------------
+Q no 5: List details of employees as ename, deptno, dname, sal, comm working in dept 20 and 30 who did not get any commission.
+mysql> select e.ename,e.deptno,d.dname,e.sal,e.comm from emp e, dept d where e.deptno in(20,30) and comm is null;
++-------+--------+------------+---------+------+
+| ename | deptno | dname      | sal     | comm |
++-------+--------+------------+---------+------+
+| FORD  |     20 | ACCOUNTING | 3300.00 | NULL |
+| JAMES |     30 | ACCOUNTING | 1045.00 | NULL |
+| ADAMS |     20 | ACCOUNTING | 1100.00 | NULL |
+| SCOTT |     20 | ACCOUNTING | 3000.00 | NULL |
+| BLAKE |     30 | ACCOUNTING | 3135.00 | NULL |
+| JONES |     20 | ACCOUNTING | 3272.50 | NULL |
+| SMITH |     20 | ACCOUNTING |  880.00 | NULL |
+| FORD  |     20 | RESEARCH   | 3300.00 | NULL |
+| JAMES |     30 | RESEARCH   | 1045.00 | NULL |
+| ADAMS |     20 | RESEARCH   | 1100.00 | NULL |
+| SCOTT |     20 | RESEARCH   | 3000.00 | NULL |
+| BLAKE |     30 | RESEARCH   | 3135.00 | NULL |
+| JONES |     20 | RESEARCH   | 3272.50 | NULL |
+| SMITH |     20 | RESEARCH   |  880.00 | NULL |
+| FORD  |     20 | SALES      | 3300.00 | NULL |
+| JAMES |     30 | SALES      | 1045.00 | NULL |
+| ADAMS |     20 | SALES      | 1100.00 | NULL |
+| SCOTT |     20 | SALES      | 3000.00 | NULL |
+| BLAKE |     30 | SALES      | 3135.00 | NULL |
+| JONES |     20 | SALES      | 3272.50 | NULL |
+| SMITH |     20 | SALES      |  880.00 | NULL |
+| FORD  |     20 | OPERATIONS | 3300.00 | NULL |
+| JAMES |     30 | OPERATIONS | 1045.00 | NULL |
+| ADAMS |     20 | OPERATIONS | 1100.00 | NULL |
+| SCOTT |     20 | OPERATIONS | 3000.00 | NULL |
+| BLAKE |     30 | OPERATIONS | 3135.00 | NULL |
+| JONES |     20 | OPERATIONS | 3272.50 | NULL |
+| SMITH |     20 | OPERATIONS |  880.00 | NULL |
++-------+--------+------------+---------+------+
+28 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------
+Q no 6: Display ename, sal and grade of employee (use salgrade table).
+mysql> select e.ename, e.sal, s.grade from emp e, salgrade s;
++--------+---------+-------+
+| ename  | sal     | grade |
++--------+---------+-------+
+| SMITH  |  880.00 |     5 |
+| SMITH  |  880.00 |     4 |
+| SMITH  |  880.00 |     3 |
+140 rows in set (0.00 sec)
+--------------------------------------------------------------------------
+Q no 7 Display the information of department i.e deptno, dname and loc in which clerks are working.
+ ysql> select e.deptno, d.dname, d.loc from emp e, dept d where job='clerk';
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     30 | ACCOUNTING | NEW YORK |
+|     20 | ACCOUNTING | NEW YORK |
+|     20 | ACCOUNTING | NEW YORK |
+|     10 | RESEARCH   | DALLAS   |
+|     30 | RESEARCH   | DALLAS   |
+|     20 | RESEARCH   | DALLAS   |
+|     20 | RESEARCH   | DALLAS   |
+|     10 | SALES      | CHICAGO  |
+|     30 | SALES      | CHICAGO  |
+|     20 | SALES      | CHICAGO  |
+|     20 | SALES      | CHICAGO  |
+|     10 | OPERATIONS | BOSTON   |
+|     30 | OPERATIONS | BOSTON   |
+|     20 | OPERATIONS | BOSTON   |
+|     20 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+16 rows in set (0.00 sec)
+--------------------------------------------------------------------------
+
+Create following tables and implement all set operators
+
+Table t1(id, city)
+
+Table t2(id,city)
+
+(1, 'Pune'), (2, 'Mumbai'), (3, 'Hydrabad')
+
+(1,'Surat'), (2, 'Mumbai'), (3, 'Hydrabad')
+
+(4,'Chennai')
+
+(5,'Chennai')
