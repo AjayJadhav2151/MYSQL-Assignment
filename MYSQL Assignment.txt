@@ -155,6 +155,20 @@ mysql> select sname from salesman where city='pune';
 -------------------------------------------------------------------------------------------------------------------------------------
 question number 4: delete customer from pimpri area.
 
+mysql> delete from customer where location = "pimpri";
+Query OK, 2 rows affected (0.01 sec)
+
+mysql>  select * from customer;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      4 | Priya  | Aundh    |
+|      6 | raj    | Aundh    |
+|      7 | yash   | aundh    |
++--------+--------+----------+
+5 rows in set (0.00 sec)
 -------------------------------------------------------------------------------------------------------------------------------------
 
 question number 5: add new customer 
@@ -178,7 +192,19 @@ mysql> select * from customer;
 7 rows in set (0.00 sec)
 ---------------------------------------------------------------------------------------------------------------------------------------
 question number 6: delete customer from area aundh whose name Priya
+mysql> delete from customer where location = "aundh" and cname = "priya";
+Query OK, 1 row affected (0.01 sec)
 
+mysql>  select * from customer;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      6 | raj    | Aundh    |
+|      7 | yash   | aundh    |
++--------+--------+----------+
+4 rows in set (0.00 sec)
 ---------------------------------------------------------------------------------------------------------------------------------------
 question number 7: display vehicle information royal enfild
 
@@ -235,8 +261,56 @@ mysql> select * from vehicle where vname IN ('Activa','Yamaha','Hero Splendor','
 +------+---------------+--------+----------+--------+--------------------------------+
 4 rows in set (0.00 sec)
 ----------------------------------------------------------------------------------------------------------------------------------------
-question number 9:
-question number 10:
+question number 9: if buying price of the vehicle if 75000 then change it on 80000
+mysql> update vehicle set price = 80000 where price = 75000;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from vehicle;
++------+---------------+--------+----------+--------+--------------------------------+
+| vid  | vname         | price  | discount | milage | details                        |
++------+---------------+--------+----------+--------+--------------------------------+
+|    1 | Activa        |  80000 |       10 |     35 | Two wheeler.Sturdy.Milage 30km |
+|    2 | Santro        |  95000 |       20 |     20 | Product of Hyandai             |
+|    3 | Yamaha        | 160000 |        5 |     70 | Sturdy and good milage         |
+|    4 | i-10          | 300000 |        8 |     18 | Good small car                 |
+|    5 | WaganR        | 250000 |       10 |     25 | Good Milage car                |
+|    6 | Hero Splendor |  80000 |        9 |     65 | Best bike                      |
+|    7 | Royal Enfild  | 190000 |        5 |     40 | a royal bike                   |
++------+---------------+--------+----------+--------+--------------------------------+
+7 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------------------------------------
+question number 10: create copy of customer and salesman table 
+mysql> create table customer1 as select * from customer;
+Query OK, 4 rows affected (0.04 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from customer1;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      6 | raj    | Aundh    |
+|      7 | yash   | aundh    |
++--------+--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> create table salesman1 as select * from salesman;
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from salesman1;
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   10 | Rajesh   | Mumbai |          5 |
+|   11 | seema    | pune   |          8 |
+|   12 | shailesh | nagpur |          7 |
+|   13 | rakhi    | pune   |          2 |
++------+----------+--------+------------+
+4 rows in set (0.00 sec)
+
 ----------------------------------------------------------------------------------------------------------------------------------------
 question number 11: display i-10 info
 mysql> select * from vehicle where vname = 'i-10';
@@ -294,7 +368,134 @@ mysql> select * from salesman where experience > 5;
 |   12 | shailesh | nagpur |          7 |
 +------+----------+--------+------------+
 2 rows in set (0.00 sec)
+
 ---------------------------------------------------------------------------------------------------------------------------------------
-question number 15: delete table salesman 
+question number 15: delete table salesman1
+mysql> drop table salesman1;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from salesman1;
+ERROR 1146 (42S02): Table 'shoowroom.salesman1' doesn't exist
 -----------------------------------------------------------------------------------------------------------------------------------------
-question number 16: 
+question number 16: create employee table and profrom some operations
+mysql> create table employee(eno int, ename varchar(20), basic int, incentive int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into employee values (1, "rajesh",20000,1500),(2,"sarita",25000,1000),(3,"meera",15000,3000),(4,"jitesh",30000,500),(5,"ramesh",12000,3000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    3 | meera  | 15000 |      3000 |
+|    4 | jitesh | 30000 |       500 |
+|    5 | ramesh | 12000 |      3000 |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+
+Q 1: list all emp having basic>15000
+mysql> select * from employee where basic > 15000;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    4 | jitesh | 30000 |       500 |
++------+--------+-------+-----------+
+3 rows in set (0.00 sec)
+
+Q2: change incentive of Jitesh to 1000
+mysql> update employee set incentive = 1000 where ename = "jitesh";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    3 | meera  | 15000 |      3000 |
+|    4 | jitesh | 30000 |      1000 |
+|    5 | ramesh | 12000 |      3000 |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+
+Q 3: increase all employee earning less than 20000 basic by 5%
+mysql> update employee set basic = basic+(basic*0.05) where basic < 20000;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    3 | meera  | 15750 |      3000 |
+|    4 | jitesh | 30000 |      1000 |
+|    5 | ramesh | 12600 |      3000 |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+***********************only projection *********************************
+mysql> select eno,ename, basic+(basic*0.05) as basic,incentive from employee where basic < 20000;
++------+--------+----------+-----------+
+| eno  | ename  | basic    | incentive |
++------+--------+----------+-----------+
+|    3 | meera  | 16537.50 |      3000 |
+|    5 | ramesh | 13230.00 |      3000 |
++------+--------+----------+-----------+
+2 rows in set (0.00 sec)
+-----------------------------------------------------------------------------------------------------
+Q 4: new emp ajay join in table
+mysql> insert into employee values(20,"ajay",16000,null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    3 | meera  | 15750 |      3000 |
+|    4 | jitesh | 30000 |      1000 |
+|    5 | ramesh | 12600 |      3000 |
+|   20 | ajay   | 16000 |      NULL |
++------+--------+-------+-----------+
+6 rows in set (0.00 sec)
+mysql> delete from employee where ename = "meera";
+Query OK, 1 row affected (0.01 sec)
+--------------------------------------------------------------------------------------------------------
+Q 5 meera leave company delete it
+mysql> select * from employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    4 | jitesh | 30000 |      1000 |
+|    5 | ramesh | 12600 |      3000 |
+|   20 | ajay   | 16000 |      NULL |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------
+Q 6: Ramesh promoted as head clear now earns salary 60000.
+mysql> update employee set basic = 60000 where ename = "ramesh";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    4 | jitesh | 30000 |      1000 |
+|    5 | ramesh | 60000 |      3000 |
+|   20 | ajay   | 16000 |      NULL |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
