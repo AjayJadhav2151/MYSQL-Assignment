@@ -470,7 +470,13 @@ mysql> select * from emp where deptno in (20,30) and comm is not null;
 4 rows in set (0.00 sec)
 --------------------------------------------------------------------------------------------------------------------------
 Q no 28: count no of clerk in dept 10 and 20
-
+mysql> select count(*) from emp where deptno in (10,20) and job = 'clerk';
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+1 row in set (0.00 sec)
 ---------------------------------------------------------------------------------------------------------------------
 Q no 29: list all clerk and analysts with salary atleast 1000 in dept 20 and 30
 mysql> select * from emp where job in ('clerk','analysts') and deptno in (20,30) and sal <= 1000;
