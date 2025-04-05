@@ -1,0 +1,201 @@
+Consider already created employee table with schema as employee (eno, ename, basic, incentives) and solve the following queries.
+mysql> select * from employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | rajesh | 20000 |      1500 |
+|    2 | sarita | 25000 |      1000 |
+|    4 | jitesh | 30000 |      1000 |
+|    5 | ramesh | 60000 |      3000 |
+|   20 | ajay   | 16000 |      NULL |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------
+1. Add column job in the above table. Job is the designation of an employee and it is varchar(12).
+
+mysql> alter table employee add job varchar(12);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+------+
+| eno  | ename  | basic | incentive | job  |
++------+--------+-------+-----------+------+
+|    1 | rajesh | 20000 |      1500 | NULL |
+|    2 | sarita | 25000 |      1000 | NULL |
+|    4 | jitesh | 30000 |      1000 | NULL |
+|    5 | ramesh | 60000 |      3000 | NULL |
+|   20 | ajay   | 16000 |      NULL | NULL |
++------+--------+-------+-----------+------+
+5 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------------
+2. Ramesh is promoted as Head Clerk. Assign him new job in the table.
+
+mysql> update employee set job = 'Hear Clerk' where ename = 'rajesh';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+------------+
+| eno  | ename  | basic | incentive | job        |
++------+--------+-------+-----------+------------+
+|    1 | rajesh | 20000 |      1500 | Hear Clerk |
+|    2 | sarita | 25000 |      1000 | NULL       |
+|    4 | jitesh | 30000 |      1000 | NULL       |
+|    5 | ramesh | 60000 |      3000 | NULL       |
+|   20 | ajay   | 16000 |      NULL | NULL       |
++------+--------+-------+-----------+------------+
+5 rows in set (0.00 sec)
+-----------------------------------------------------------------------------------------------------
+3. Sarita and Jitesh are pramoted as Analyst. Make necessary changes in the table.
+mysql> update employee set job = 'Analyst' where eno in (2,4);
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+------------+
+| eno  | ename  | basic | incentive | job        |
++------+--------+-------+-----------+------------+
+|    1 | rajesh | 20000 |      1500 | Hear Clerk |
+|    2 | sarita | 25000 |      1000 | Analyst    |
+|    4 | jitesh | 30000 |      1000 | Analyst    |
+|    5 | ramesh | 60000 |      3000 | NULL       |
+|   20 | ajay   | 16000 |      NULL | NULL       |
++------+--------+-------+-----------+------------+
+5 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------
+4. Change job to Manager for all employees other than 'Head Clerk' or 'Analyst'
+
+mysql> update employee set job = 'Manager' where job is null;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from employee;
++------+--------+-------+-----------+------------+
+| eno  | ename  | basic | incentive | job        |
++------+--------+-------+-----------+------------+
+|    1 | rajesh | 20000 |      1500 | Hear Clerk |
+|    2 | sarita | 25000 |      1000 | Analyst    |
+|    4 | jitesh | 30000 |      1000 | Analyst    |
+|    5 | ramesh | 60000 |      3000 | Manager    |
+|   20 | ajay   | 16000 |      NULL | Manager    |
++------+--------+-------+-----------+------------+
+5 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------
+Note: Apply following constraints
+mysql> select * from cust_vehicle;
++------+--------+------+------+-----------+
+| tid  | custid | vid  | sid  | buy_price |
++------+--------+------+------+-----------+
+|    1 |      1 |    1 |   10 |     75000 |
+|    2 |      1 |    2 |   10 |     79000 |
+|    3 |      2 |    3 |   11 |     80000 |
+|    4 |      3 |    3 |   11 |     75000 |
+|    5 |      3 |    2 |   10 |    800000 |
++------+--------+------+------+-----------+
+5 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------
+- tid is a transaction id
+
+mysql> alter table cust_vehicle rename column tid to transaction_id;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from cust_vehicle;
++----------------+--------+------+------+-----------+
+| transaction_id | custid | vid  | sid  | buy_price |
++----------------+--------+------+------+-----------+
+|              1 |      1 |    1 |   10 |     75000 |
+|              2 |      1 |    2 |   10 |     79000 |
+|              3 |      2 |    3 |   11 |     80000 |
+|              4 |      3 |    3 |   11 |     75000 |
+|              5 |      3 |    2 |   10 |    800000 |
++----------------+--------+------+------+-----------+
+5 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------
+- all other entries in the table are not null.
+mysql> alter table cust_vehicle modify column transaction_id int not null, modify column custid int not null, modify column vid int not null, modify column sid int not null;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe cust_vehicle;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| transaction_id | int  | NO   |     | NULL    |       |
+| custid         | int  | NO   |     | NULL    |       |
+| vid            | int  | NO   |     | NULL    |       |
+| sid            | int  | NO   |     | NULL    |       |
+| buy_price      | int  | YES  |     | NULL    |       |
++----------------+------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+------------------------------------------------------------------------------------------------
+- buy_price is greator than 0.
+mysql> alter table cust_vehicle modify column buy_price int check (buy_price>0);
+Query OK, 5 rows affected (0.05 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> describe cust_vehicle;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| transaction_id | int  | NO   |     | NULL    |       |
+| custid         | int  | NO   |     | NULL    |       |
+| vid            | int  | NO   |     | NULL    |       |
+| sid            | int  | NO   |     | NULL    |       |
+| buy_price      | int  | YES  |     | NULL    |       |
++----------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+to check its right or not;
+
+mysql> insert into cust_vehicle values(9,9,9,9,0);
+ERROR 3819 (HY000): Check constraint 'cust_vehicle_chk_1' is violated.
+
+--------------------------------------------------------------------------------------------------------------
+1. Add new column by name rating with number data type in cust_vehicle table.
+mysql> alter table cust_vehicle add column rating int;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe cust_vehicle;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| transaction_id | int  | NO   |     | NULL    |       |
+| custid         | int  | NO   |     | NULL    |       |
+| vid            | int  | NO   |     | NULL    |       |
+| sid            | int  | NO   |     | NULL    |       |
+| buy_price      | int  | YES  |     | NULL    |       |
+| rating         | int  | YES  |     | NULL    |       |
++----------------+------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> select * from cust_vehicle;
++----------------+--------+-----+-----+-----------+--------+
+| transaction_id | custid | vid | sid | buy_price | rating |
++----------------+--------+-----+-----+-----------+--------+
+|              1 |      1 |   1 |  10 |     75000 |   NULL |
+|              2 |      1 |   2 |  10 |     79000 |   NULL |
+|              3 |      2 |   3 |  11 |     80000 |   NULL |
+|              4 |      3 |   3 |  11 |     75000 |   NULL |
+|              5 |      3 |   2 |  10 |    800000 |   NULL |
++----------------+--------+-----+-----+-----------+--------+
+5 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------------
+2. Give rating 5 to all the vehicles with price greater than 90000.
+mysql> update cust_vehicle set rating = 5 where buy_price > 90000;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from cust_vehicle;
++----------------+--------+-----+-----+-----------+--------+
+| transaction_id | custid | vid | sid | buy_price | rating |
++----------------+--------+-----+-----+-----------+--------+
+|              1 |      1 |   1 |  10 |     75000 |   NULL |
+|              2 |      1 |   2 |  10 |     79000 |   NULL |
+|              3 |      2 |   3 |  11 |     80000 |   NULL |
+|              4 |      3 |   3 |  11 |     75000 |   NULL |
+|              5 |      3 |   2 |  10 |    800000 |      5 |
++----------------+--------+-----+-----+-----------+--------+
+5 rows in set (0.00 sec)
