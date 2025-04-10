@@ -1,0 +1,514 @@
+Q  no 1: display all employees who earn sal more that Smith earns.
+-------------------------------------------------------------------------------
+select * 
+from emp 
+where sal > (select sal 
+		from emp
+		where ename = 'smith');
+--------------------------------------------------------------------------
++-------+--------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1760.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1375.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 3272.50 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1375.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 3135.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2695.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5500.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1650.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 | 1045.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3300.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1430.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+13 rows in set (0.01 sec)
+------------------------------------------------------------------------------------------------
+Q no 3:display all employees who earn salary < scott and salary > adams sal.
+-----------------------------------------------------------------------
+select *
+from emp
+where sal between (select sal
+			from emp
+			where ename = 'adams')
+	and
+		 (select sal
+                    	from emp
+                    	where ename = 'scott');
+------------------------------------------------------------------------
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1760.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1375.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1375.00 | 1400.00 |     30 |
+|  7782 | CLARK  | MANAGER  | 7839 | 1981-06-09 | 2695.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST  | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1650.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK    | 7782 | 1982-01-23 | 1430.00 |    NULL |     10 |
++-------+--------+----------+------+------------+---------+---------+--------+
+8 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------
+Q no 4: display all employee with salary > either ward's salary or Blake's sal.
+----------------------------------------------------------------------------------------------------------
+mysql> select *
+     from emp
+     where sal > (select sal
+              from emp
+              where ename ='ward')
+      or
+      sal > (select sal
+              from emp
+              where ename = 'blake');
++-------+--------+-----------+------+------------+---------+--------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM   | DEPTNO |
++-------+--------+-----------+------+------------+---------+--------+--------+
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1760.00 | 300.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 3272.50 |   NULL |     20 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 3135.00 |   NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2695.00 |   NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |   NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5500.00 |   NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1650.00 |   0.00 |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3300.00 |   NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1430.00 |   NULL |     10 |
++-------+--------+-----------+------+------------+---------+--------+--------+
+9 rows in set (0.00 sec)
+--------------------------------------------------------------------------------------------
+Q no 5: display all employee who earn more than average sal of dept 10.
+--------------------------------------------------------------------
+select *
+from emp
+where sal > (select avg(sal)
+		from emp
+		where deptno = 10);
+------------------------------------------------------------------
++-------+-------+-----------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB       | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+-----------+------+------------+---------+------+--------+
+|  7566 | JONES | MANAGER   | 7839 | 1981-04-02 | 3272.50 | NULL |     20 |
+|  7839 | KING  | PRESIDENT | NULL | 1981-11-17 | 5500.00 | NULL |     10 |
+|  7902 | FORD  | ANALYST   | 7566 | 1981-12-03 | 3300.00 | NULL |     20 |
++-------+-------+-----------+------+------------+---------+------+--------+
+3 rows in set (0.00 sec)
+---------------------------------------------------------------------------------
+Qno 6:display all employees who are working in research department.
+-------------------------------------------------------------------
+select * 
+from emp
+where deptno = (select deptno
+			from dept
+			where dname='research');
+----------------------------------------------------------------------
++-------+-------+---------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7369 | SMITH | CLERK   | 7902 | 1980-12-17 |  880.00 | NULL |     20 |
+|  7566 | JONES | MANAGER | 7839 | 1981-04-02 | 3272.50 | NULL |     20 |
+|  7788 | SCOTT | ANALYST | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7876 | ADAMS | CLERK   | 7788 | 1983-01-12 | 1100.00 | NULL |     20 |
+|  7902 | FORD  | ANALYST | 7566 | 1981-12-03 | 3300.00 | NULL |     20 |
++-------+-------+---------+------+------------+---------+------+--------+
+5 rows in set (0.00 sec)
+--------------------------------------------------------------------------------
+Q no 7: display deptno, sum of salary and min(sal) for all employee who are managers.
+---------------------------------------------------------------------------------
+select deptno, sum(sal), min(sal)
+from emp
+where job = 'manager'
+group by deptno;
+-----------------------------------------------------------------------------------
++--------+----------+----------+
+| deptno | sum(sal) | min(sal) |
++--------+----------+----------+
+|     20 |  3272.50 |  3272.50 |
+|     30 |  3135.00 |  3135.00 |
+|     10 |  2695.00 |  2695.00 |
++--------+----------+----------+
+3 rows in set (0.00 sec)
+----------------------------------------------------------------------------------
+Q no 8:
+create table category(
+	cid int primary key,
+	cname varchar(15) unique not null,
+	description varchar(30)
+	);
+
+insert into category values (1,'chips','very crunchy'),(2,'chocolate','very chocolaty'),(3,'snacks','yummy'),(4,'cold drinks','Thanda thanda cool cool');
+------------------------------------------------------------------------
+mysql> create table category(
+    ->  cid int primary key,
+    ->  cname varchar(15) unique not null,
+    ->  description varchar(30)
+    ->  );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into category values (1,'chips','very crunchy'),(2,'chocolate','very chocolaty'),(3,'snacks','yummy'),(4,'cold drinks','Thanda thanda cool cool');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from category;
++-----+-------------+-------------------------+
+| cid | cname       | description             |
++-----+-------------+-------------------------+
+|   1 | chips       | very crunchy            |
+|   2 | chocolate   | very chocolaty          |
+|   3 | snacks      | yummy                   |
+|   4 | cold drinks | Thanda thanda cool cool |
++-----+-------------+-------------------------+
+4 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------------
+
+create table product(
+	pid int primary key,
+	pname varchar(20),
+	price float(6,2) default 20.00,
+	qty int check(qty>0),
+	cid int, 
+	sid int,
+	constraint fk_cidd foreign key(cid)
+	references category(cid) on delete set null,
+	constraint fk_sid foreign key(sid)
+	references salesman(sid)
+	);
+
+insert into product values (123,'lays',30,30.00,1,12),(111,'pepsi',40,50.00,4,11),(134,'nachos',50,50.00,1,12),(124,'dairy milk',40,60.00,2,14),(125,'pringles',40,60.00,1,14),(213,'sketch pens',56,150.00,null,11),(167,'eraser',90,5.00,null,null);
+-------------------------------------------------------------------
+mysql> create table product(
+    ->  pid int primary key,
+    ->  pname varchar(20),
+    ->  price float(6,2) default 20.00,
+    ->  qty int check(qty>0),
+    ->  cid int,
+    ->  sid int,
+    ->  constraint fk_cidd foreign key(cid)
+    ->  references category(cid) on delete set null,
+    ->  constraint fk_sid foreign key(sid)
+    ->  references salesman(sid)
+    ->  );
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> insert into product values (123,'lays',30,30.00,1,12),(111,'pepsi',40,50.00,4,11),(134,'nachos',50,50.00,1,12),(124,'dairy milk',40,60.00,2,14),(125,'pringles',40,60.00,1,14),(213,'sketch pens',56,150.00,null,11),(167,'eraser',90,5.00,null,null);
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from product;
++-----+-------------+-------+------+------+------+
+| pid | pname       | price | qty  | cid  | sid  |
++-----+-------------+-------+------+------+------+
+| 111 | pepsi       | 40.00 |   50 |    4 |   11 |
+| 123 | lays        | 30.00 |   30 |    1 |   12 |
+| 124 | dairy milk  | 40.00 |   60 |    2 |   14 |
+| 125 | pringles    | 40.00 |   60 |    1 |   14 |
+| 134 | nachos      | 50.00 |   50 |    1 |   12 |
+| 167 | eraser      | 90.00 |    5 | NULL | NULL |
+| 213 | sketch pens | 56.00 |  150 | NULL |   11 |
++-----+-------------+-------+------+------+------+
+7 rows in set (0.00 sec)
+
+----------------------------------------------------------------------------------------------------------------------------
+create table salesman(
+	sid int primary key,
+	sname varchar(15) unique not null,
+	city varchar(15)
+);
+
+insert into salesman values (11,'rahul','pune'),(12,'kirti',''mumbai),(13,'prasad','nashik'),(14,'arnav','amravati');
+--------------------------------------------------------
+mysql> create table salesman(
+    ->  sid int primary key,
+    ->  sname varchar(15) unique not null,
+    ->  city varchar(15)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+mysql> insert into salesman values (11,'rahul','pune'),(12,'kirti','mumbai'),(13,'prasad','nashik'),(14,'arnav','amravati');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from salesman;
++-----+--------+----------+
+| sid | sname  | city     |
++-----+--------+----------+
+|  11 | rahul  | pune     |
+|  12 | kirti  | mumbai   |
+|  13 | prasad | nashik   |
+|  14 | arnav  | amravati |
++-----+--------+----------+
+4 rows in set (0.00 sec)
+--------------------------------------------------------------------------------------------------------------------------------
+Q no 8:
+Q no 1:list all pid,pname,cid,cname with category chips.
+-----------------------------------------------------------
+select p.pid,p.pname,p.cid,c.cname 
+from product p, category c
+where p.cid = c.cid and c.cname = 'chips';
+-----------------------------------
++-----+----------+------+-------+
+| pid | pname    | cid  | cname |
++-----+----------+------+-------+
+| 123 | lays     |    1 | chips |
+| 125 | pringles |    1 | chips |
+| 134 | nachos   |    1 | chips |
++-----+----------+------+-------+
+3 rows in set (0.00 sec)
+-----------------------------------------------------------
+Q no 2:list all pid,pname,cid,cname with category chips.
+-----------------------------------------------------------
+mysql> select p.pid,p.pname,p.cid,c.cname
+    -> from product p, category c
+    -> where p.cid = c.cid and c.cname = 'chips';
++-----+----------+------+-------+
+| pid | pname    | cid  | cname |
++-----+----------+------+-------+
+| 123 | lays     |    1 | chips |
+| 125 | pringles |    1 | chips |
+| 134 | nachos   |    1 | chips |
++-----+----------+------+-------+
+3 rows in set (0.00 sec)
+----------------------------------------------------------
+Q no 3:display all salesman who did not sell any product.
+----------------------------------------------------------
+select * 
+from salesman s 
+where s.sid not in (select sid
+			from product p 
+			where p.sid = s.sid); 
+---------------------------------------------
++-----+--------+--------+
+| sid | sname  | city   |
++-----+--------+--------+
+|  13 | prasad | nashik |
++-----+--------+--------+
+1 row in set (0.00 sec)
+--------------------------------------------------------
+Q no 4: display all category for which no product is assigned
+------------------------------------------------------
+select * 
+from category c
+where c.cid not in (select cid
+			from product p
+			where p.cid = c.cid);
++-----+--------+-------------+
+| cid | cname  | description |
++-----+--------+-------------+
+|   3 | snacks | yummy       |
++-----+--------+-------------+
+1 row in set (0.00 sec)
+------------------------------------------------------
+Q no 5:  display all product to which category is not assigned.
+-----------------------------------------------------
+select * 
+from product p
+where p.cid not in (select cid
+			from category C
+			where c.cid = p.cid);
++-----+-------------+-------+------+------+------+
+| pid | pname       | price | qty  | cid  | sid  |
++-----+-------------+-------+------+------+------+
+| 167 | eraser      | 90.00 |    5 | NULL | NULL |
+| 213 | sketch pens | 56.00 |  150 | NULL |   11 |
++-----+-------------+-------+------+------+------+
+2 rows in set (0.00 sec)
+--------------------------------------------------------------
+Q no 6: list all salesman who stays in city where name starts with p or n.
+-------------------------------------------------------------
+select * 
+from salesman
+where city like 'p%' or city like 'n%';
++-----+--------+--------+
+| sid | sname  | city   |
++-----+--------+--------+
+|  11 | rahul  | pune   |
+|  13 | prasad | nashik |
++-----+--------+--------+
+2 rows in set (0.00 sec)
+--------------------------------------------------------------
+Q no 7. add new columan in salesman table by name credit limit.
+-------------------------------------------------------------
+mysql> alter table salesman 
+	add creadit_limit int;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+mysql> select * from salesman;
++-----+--------+----------+---------------+
+| sid | sname  | city     | creadit_limit |
++-----+--------+----------+---------------+
+|  11 | rahul  | pune     |          NULL |
+|  12 | kirti  | mumbai   |          NULL |
+|  13 | prasad | nashik   |          NULL |
+|  14 | arnav  | amravati |          NULL |
++-----+--------+----------+---------------+
+4 rows in set (0.00 sec)
+----------------------------------------------------------------------
+Q no 8: write a query which will display dept no and dept names to which no employee is assigned dept. use emp and dept table.
+------------------------------------------------------------------------
+select deptno , dname
+from dept 
+where deptno not in (select deptno
+			from emp );
++--------+------------+
+| deptno | dname      |
++--------+------------+
+|     40 | OPERATIONS |
++--------+------------+
+1 row in set (0.00 sec)
+----------------------------------------------------------------------------------------------------------------------
+Q no 9:
+mysql> CREATE TABLE faculty (
+    -> fid INT PRIMARY KEY,
+    -> fname VARCHAR(20) NOT NULL,
+    -> sp_skill1 VARCHAR(30),
+    -> sp_skill2 VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+----------------------------------------------------------
+mysql> CREATE TABLE room (
+    -> rid INT PRIMARY KEY,
+    -> rname VARCHAR(15) NOT NULL,
+    -> rloc VARCHAR(20)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+----------------------------------------------------------
+mysql> CREATE TABLE courses (
+    -> cid INT PRIMARY KEY,
+    -> cname VARCHAR(15) NOT NULL,
+    -> rid INT,
+    -> fid INT,
+    -> FOREIGN KEY (rid) REFERENCES room(rid) ON DELETE SET NULL,
+    -> FOREIGN KEY (fid) REFERENCES faculty(fid) ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+-----------------------------------------------------------
+mysql> INSERT INTO faculty (fid, fname, sp_skill1, sp_skill2) VALUES
+    -> (10, 'Amol', 'Database', 'Java'),
+    -> (11, 'Asha', 'Java', 'MySQL'),
+    -> (12, 'Kiran', 'CPP', 'database'),
+    -> (13, 'Seeta', 'MySQL', 'database');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO room (rid, rname, rloc) VALUES
+    -> (100, 'Jasmin', '1st floor'),
+    -> (101, 'Rose', '2nd floor'),
+    -> (105, 'Lotus', '1st floor'),
+    -> (103, 'Mogra', '1st floor');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO courses (cid, cname, rid, fid) VALUES
+    -> (121, 'DBDA', 100, 10),
+    -> (131, 'DAC', 101, NULL),
+    -> (141, 'DTISS', NULL, NULL),
+    -> (151, 'DOIT', 105, 12);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+-----------------------------------------------------------------------------------------
+mysql> select * from faculty;
++-----+-------+-----------+-----------+
+| fid | fname | sp_skill1 | sp_skill2 |
++-----+-------+-----------+-----------+
+|  10 | Amol  | Database  | Java      |
+|  11 | Asha  | Java      | MySQL     |
+|  12 | Kiran | CPP       | database  |
+|  13 | Seeta | MySQL     | database  |
++-----+-------+-----------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from room;
++-----+--------+-----------+
+| rid | rname  | rloc      |
++-----+--------+-----------+
+| 100 | Jasmin | 1st floor |
+| 101 | Rose   | 2nd floor |
+| 103 | Mogra  | 1st floor |
+| 105 | Lotus  | 1st floor |
++-----+--------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from courses;
++-----+-------+------+------+
+| cid | cname | rid  | fid  |
++-----+-------+------+------+
+| 121 | DBDA  |  100 |   10 |
+| 131 | DAC   |  101 | NULL |
+| 141 | DTISS | NULL | NULL |
+| 151 | DOIT  |  105 |   12 |
++-----+-------+------+------+
+4 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------
+Q no 1:
+list all room which are not allocated to any course.
+select * 
+from room r
+where r.rid not in (select c.rid
+			from courses c
+			where r.rid=c.rid);
++-----+-------+-----------+
+| rid | rname | rloc      |
++-----+-------+-----------+
+| 103 | Mogra | 1st floor |
++-----+-------+-----------+
+1 row in set (0.00 sec)
+-----------------------------------------------------------------------------------
+Q no 2:
+list all rooms which are allocated or not allocated to any courses.
+----------------------------------------------------------------------------------
+select r.rid,r.rname,r.rloc, case when c.rid is not null then "Allocated" else "not allocated"
+	 end 
+	allocation_status 
+from room r 
+left join courses c
+on c.rid=r.rid; 
++-----+--------+-----------+-------------------+
+| rid | rname  | rloc      | allocation_status |
++-----+--------+-----------+-------------------+
+| 100 | Jasmin | 1st floor | Allocated         |
+| 101 | Rose   | 2nd floor | Allocated         |
+| 103 | Mogra  | 1st floor | not allocated     |
+| 105 | Lotus  | 1st floor | Allocated         |
++-----+--------+-----------+-------------------+
+4 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------
+Q no 3.
+select c.cname, f.fname 
+from courses c 
+join faculty f
+on c.fid=f.fid
+where f.sp_skill2='database';
++-------+-------+
+| cname | fname |
++-------+-------+
+| DBDA  | Amol  |
++-------+-------+
+1 row in set (0.00 sec)
+--------------------------
+mysql> select c.cname, f.fname
+    -> from courses c
+    -> join faculty f
+    -> on c.fid=f.fid
+    -> where f.sp_skill2='database';
++-------+-------+
+| cname | fname |
++-------+-------+
+| DOIT  | Kiran |
++-------+-------+
+1 row in set (0.00 sec)
+------------------------------------------------------------------------------------------------
+Q no 4:
+
+select c.cid,c.cname,c.rid,c.fid,r.rid,r.rname,r.rloc,f.fid,f.fname,f.sp_skill1,f.sp_skill2 
+from courses c
+join room r 
+on c.rid=r.rid
+join faculty f
+on c.fid=f.fid; 
++-----+-------+------+------+-----+--------+-----------+-----+-------+-----------+-----------+
+| cid | cname | rid  | fid  | rid | rname  | rloc      | fid | fname | sp_skill1 | sp_skill2 |
++-----+-------+------+------+-----+--------+-----------+-----+-------+-----------+-----------+
+| 121 | DBDA  |  100 |   10 | 100 | Jasmin | 1st floor |  10 | Amol  | Database  | Java      |
+| 151 | DOIT  |  105 |   12 | 105 | Lotus  | 1st floor |  12 | Kiran | CPP       | database  |
++-----+-------+------+------+-----+--------+-----------+-----+-------+-----------+-----------+
+2 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------

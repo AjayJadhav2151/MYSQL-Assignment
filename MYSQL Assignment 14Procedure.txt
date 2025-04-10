@@ -1,0 +1,93 @@
+Q 1. write a store procedure which will find avg of all the salaries in the table. display avg sal in the procedure.
+--------------------------------------------------------------------------------------------------------------------------
+delimiter //
+create procedure avgr()
+begin 
+	select avg(sal)
+	from emp;
+end //
+delimiter ;
+-----------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create procedure avgr()
+    -> begin
+    ->  select avg(sal)
+    ->  from emp;
+    -> end //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter ;
+mysql> call avgr();
++-------------+
+| avg(sal)    |
++-------------+
+| 2767.833333 |
++-------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+----------------------------------------------------------------------------------------------------------------------
+Q 2. write a stored procedure which will find avg salary of dept no20. display avg salary out of the procedure.
+---------------------------------------------------------------------------------------------------------------------
+delimiter //
+create procedure avgr2(out b decimal(7,2))
+begin 
+	select avg(sal)
+	from emp
+	where deptno=20;
+end //
+delimiter ;
+------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create procedure avgr2(out b decimal(7,2))
+    -> begin
+    ->  select avg(sal)
+    ->  from emp
+    ->  where deptno=20;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+
+mysql> call avgr2(@p);
++-------------+
+| avg(sal)    |
++-------------+
+| 3592.083333 |
++-------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+---------------------------------------------------------------------------------------------------------------------------
+Q 3. write a stored procedure which will find avg salary for any deptno passed to ti. pass deptno as in parameter and avg(sal) as out parameter.
+---------------------------------------------------------------------------------------------------------------------
+delimiter //
+create procedure avgr3(in a int, out b decimal(7,2))
+begin 
+	select avg(sal) into b
+	from emp
+	where deptno=a;
+end //
+delimiter ;
+------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create procedure avgr3(in a int, out b decimal(7,2))
+    -> begin
+    ->  select avg(sal) into b
+    ->  from emp
+    ->  where deptno=a;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call avgr3(20,@p);
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+mysql> select @p;
++---------+
+| @p      |
++---------+
+| 3592.08 |
++---------+
+1 row in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------------  

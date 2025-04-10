@@ -1,0 +1,401 @@
+Q no1. write a cursor which will handle all rows having deptno 20.
+-------------------------------------------------------------------------------------------------------------------------
+delimiter //
+create procedure cursor1()
+begin 
+	declare a int ;
+	declare b varchar(15);
+	declare c int ;
+	declare flag int default 0;
+declare cur cursor for
+	
+	select empno,ename,deptno
+	from emp
+	where deptno = 20;
+	
+declare continue handler for NOT FOUND
+	set flag = 1;
+open cur;
+	print : loop
+fetch cur into a,b,c;
+	if flag = 1
+	then
+	leave print;
+	end if;
+select a,b,c;
+end loop print;
+close cur;
+end //
+delimiter ;
+----------------------------------------------------------------------------------------------------------------------------
+
+mysql> delimiter //
+mysql> create procedure cursor1()
+    -> begin
+    ->  declare a int ;
+    ->  declare b varchar(15);
+    ->  declare c int ;
+    ->  declare flag int default 0;
+    ->  declare cur cursor for
+    ->
+    ->  select empno,ename,deptno
+    ->  from emp
+    ->  where deptno = 20;
+    ->
+    -> declare continue handler for NOT FOUND
+    ->  set flag = 1;
+    -> open cur;
+    ->  print : loop
+    -> fetch cur into a,b,c;
+    ->  if flag = 1
+    ->  then
+    ->  leave print;
+    ->  end if;
+    -> select a,b,c;
+    -> end loop print;
+    -> close cur;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+----------------------------------------------------------------------------------
+mysql> call cursor1;
++------+-------+------+
+| a    | b     | c    |
++------+-------+------+
+| 1111 | geeta |   20 |
++------+-------+------+
+1 row in set (0.00 sec)
+
++------+-------+------+
+| a    | b     | c    |
++------+-------+------+
+| 7369 | SMITH |   20 |
++------+-------+------+
+1 row in set (0.01 sec)
+
++------+-------+------+
+| a    | b     | c    |
++------+-------+------+
+| 7566 | JONES |   20 |
++------+-------+------+
+1 row in set (0.01 sec)
+
++------+-------+------+
+| a    | b     | c    |
++------+-------+------+
+| 7788 | SCOTT |   20 |
++------+-------+------+
+1 row in set (0.01 sec)
+
++------+-------+------+
+| a    | b     | c    |
++------+-------+------+
+| 7876 | ADAMS |   20 |
++------+-------+------+
+1 row in set (0.01 sec)
+
++------+------+------+
+| a    | b    | c    |
++------+------+------+
+| 7902 | FORD |   20 |
++------+------+------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q no 2. write a cursor to increment salary as follows
+clerk 10 % rise
+manager 5% rise
+analyst 7% rise  
+no rise given for other jobs. here 
+---------------------------------------------------------------------------
+delimiter //
+create procedure cursor2()
+begin 
+	declare flag int default 0;
+	declare a int;
+	declare b varchar(15);
+	declare c decimal(7,2);
+	declare d varchar(15);
+declare cur cursor for 
+	select empno,ename,sal,job
+	from emp
+	where job IN ('clerk','manager','analyst');
+declare continue handler for NOT FOUND
+	set flag = 1;
+open cur;
+	x:loop
+fetch cur into a,b,c,d;
+	if flag = 1
+	then
+		leave x;
+	end if;
+select a,b,c,d, case 
+		when d='clerk' then c+(c*0.10)
+		when d='manager' then c+(c*0.05)
+		when d='analyst' then c+(c*0.07)
+		else c
+	end as 'Increment';
+	end loop x;
+close cur;
+end //
+delimiter ;
+--------------------------------------------------------------------    
+mysql> create procedure cursor2()
+    -> begin
+    ->  declare flag int default 0;
+    ->  declare a int;
+    ->  declare b varchar(15);
+    ->  declare c decimal(7,2);
+    ->  declare d varchar(15);
+    -> declare cur cursor for
+    ->  select empno,ename,sal,job
+    ->  from emp
+    ->  where job IN ('clerk','manager','analyst');
+    -> declare continue handler for NOT FOUND
+    ->  set flag = 1;
+    -> open cur;
+    ->  x:loop
+    -> fetch cur into a,b,c,d;
+    ->  if flag = 1
+    ->  then
+    ->          leave x;
+    ->  end if;
+    -> select a,b,c,d, case
+    ->          when d='clerk' then c+(c*0.10)
+    ->          when d='manager' then c+(c*0.05)
+    ->          when d='analyst' then c+(c*0.07)
+    ->          else c
+    ->  end as 'Increment';
+    ->  end loop x;
+    -> close cur;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+-----------------------------------------------------------------------------------------
+mysql> call cursor2;
++------+------+------+---------+-----------+
+| a    | b    | c    | d       | Increment |
++------+------+------+---------+-----------+
+| 2222 | Raj  | NULL | Analyst |      NULL |
++------+------+------+---------+-----------+
+1 row in set (0.00 sec)
+
++------+-------+--------+-------+-----------+
+| a    | b     | c      | d     | Increment |
++------+-------+--------+-------+-----------+
+| 7369 | SMITH | 880.00 | CLERK |  968.0000 |
++------+-------+--------+-------+-----------+
+1 row in set (0.01 sec)
+
++------+-------+---------+---------+-----------+
+| a    | b     | c       | d       | Increment |
++------+-------+---------+---------+-----------+
+| 7566 | JONES | 3272.50 | MANAGER | 3436.1250 |
++------+-------+---------+---------+-----------+
+1 row in set (0.01 sec)
+
++------+-------+---------+---------+-----------+
+| a    | b     | c       | d       | Increment |
++------+-------+---------+---------+-----------+
+| 7698 | BLAKE | 3135.00 | MANAGER | 3291.7500 |
++------+-------+---------+---------+-----------+
+1 row in set (0.02 sec)
+
++------+-------+---------+---------+-----------+
+| a    | b     | c       | d       | Increment |
++------+-------+---------+---------+-----------+
+| 7782 | CLARK | 2695.00 | MANAGER | 2829.7500 |
++------+-------+---------+---------+-----------+
+1 row in set (0.02 sec)
+
++------+-------+---------+---------+-----------+
+| a    | b     | c       | d       | Increment |
++------+-------+---------+---------+-----------+
+| 7788 | SCOTT | 3000.00 | ANALYST | 3210.0000 |
++------+-------+---------+---------+-----------+
+1 row in set (0.02 sec)
+
++------+-------+---------+-------+-----------+
+| a    | b     | c       | d     | Increment |
++------+-------+---------+-------+-----------+
+| 7876 | ADAMS | 1100.00 | CLERK | 1210.0000 |
++------+-------+---------+-------+-----------+
+1 row in set (0.02 sec)
+
++------+-------+---------+-------+-----------+
+| a    | b     | c       | d     | Increment |
++------+-------+---------+-------+-----------+
+| 7900 | JAMES | 1045.00 | CLERK | 1149.5000 |
++------+-------+---------+-------+-----------+
+1 row in set (0.03 sec)
+
++------+------+---------+---------+-----------+
+| a    | b    | c       | d       | Increment |
++------+------+---------+---------+-----------+
+| 7902 | FORD | 3300.00 | ANALYST | 3531.0000 |
++------+------+---------+---------+-----------+
+1 row in set (0.03 sec)
+
++------+--------+---------+-------+-----------+
+| a    | b      | c       | d     | Increment |
++------+--------+---------+-------+-----------+
+| 7934 | MILLER | 1430.00 | CLERK | 1573.0000 |
++------+--------+---------+-------+-----------+
+1 row in set (0.03 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+-------------------------------------------------------------------------------------------------------------------
+******************************************** or Q no 2.*****************************************************
+
+
+---------- Forwarded message ---------
+From: kedar mane <manekedar02@gmail.com>
+Date: Thu, Apr 10, 2025 at 4:31 PM
+Subject:
+To: <pushpakkolhe9@gmail.com>
+
+
+delimiter //
+
+create procedure increment_salary()
+begin
+    -- Declare variables first
+    declare eno int;
+    declare ejob varchar(50);
+    declare esal decimal(10, 2);
+    declare new_sal decimal(10, 2);
+    declare K boolean default false;
+
+   
+    declare emp_cursor cursor for
+    select empno, job, sal
+    from emp;
+
+   
+    declare continue handler for not found set K = true;
+
+    open emp_cursor;
+
+    update_salaries: loop
+        fetch emp_cursor into eno, ejob, esal;
+
+        if K then
+            leave update_salaries;
+        end if;
+
+        set new_sal = esal;
+        if ejob = 'CLERK' then
+            set new_sal = esal * 1.10;
+        elseif ejob = 'MANAGER' then
+            set new_sal = esal * 1.05;
+        elseif ejob = 'ANALYST' then
+            set new_sal = esal * 1.07;
+        end if;
+
+        update emp
+        set sal = new_sal
+        where empno = eno;
+
+select eno,ejob,esal,new_sal;
+
+    end loop update_salaries;
+
+    close emp_cursor;
+
+end //
+
+delimiter ;
+--------------------------------------------------------------------------------------------------------------------------------------------
+Q 3. pass job as a parameter to procedure and display all employee working for the specific job using cursor.
+---------------------------------------------------------------------------------------------------------------
+delimiter //
+create procedure cursor3(in x varchar(20))
+begin 
+	declare a int ;
+	declare b varchar(15);
+	declare c int ;
+	declare flag int default 0;
+declare cur cursor for
+	
+	select empno,ename,deptno,job
+	from emp
+	where job=x;
+	
+declare continue handler for NOT FOUND
+	set flag = 1;
+open cur;
+	print : loop
+fetch cur into a,b,c,x;
+	if flag = 1
+	then
+	leave print;
+	end if;
+select a,b,c,x;
+end loop print;
+close cur;
+end //
+delimiter ;
+-------------------------------------------------------
+mysql> delimiter //
+mysql> create procedure cursor3(in x varchar(20))
+    -> begin
+    ->  declare a int ;
+    ->  declare b varchar(15);
+    ->  declare c int ;
+    ->  declare flag int default 0;
+    -> declare cur cursor for
+    ->
+    ->  select empno,ename,deptno,job
+    ->  from emp
+    ->  where job=x;
+    ->
+    -> declare continue handler for NOT FOUND
+    ->  set flag = 1;
+    -> open cur;
+    ->  print : loop
+    -> fetch cur into a,b,c,x;
+    ->  if flag = 1
+    ->  then
+    ->  leave print;
+    ->  end if;
+    -> select a,b,c,x;
+    -> end loop print;
+    -> close cur;
+    -> end //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+----------------------------------------------------------------------------------------------------------
+mysql> call cursor3('clerk');
++------+-------+------+-------+
+| a    | b     | c    | x     |
++------+-------+------+-------+
+| 7369 | SMITH |   20 | CLERK |
++------+-------+------+-------+
+1 row in set (0.00 sec)
+
++------+-------+------+-------+
+| a    | b     | c    | x     |
++------+-------+------+-------+
+| 7876 | ADAMS |   20 | CLERK |
++------+-------+------+-------+
+1 row in set (0.00 sec)
+
++------+-------+------+-------+
+| a    | b     | c    | x     |
++------+-------+------+-------+
+| 7900 | JAMES |   30 | CLERK |
++------+-------+------+-------+
+1 row in set (0.01 sec)
+
++------+--------+------+-------+
+| a    | b      | c    | x     |
++------+--------+------+-------+
+| 7934 | MILLER |   10 | CLERK |
++------+--------+------+-------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)

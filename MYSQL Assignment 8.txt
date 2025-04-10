@@ -1,0 +1,53 @@
+sum of salary each dept
+mysql> select deptno, sum(sal) from emp group by deptno;
++--------+----------+
+| deptno | sum(sal) |
++--------+----------+
+|     20 | 11552.50 |
+|     30 | 10340.00 |
+|     10 |  9625.00 |
++--------+----------+
+3 rows in set (0.01 sec)
+-----------------------------------------------
+ dept wise sum sal only if the sum for any dept is > 10000.
+mysql> select deptno, sum(sal) from emp group by deptno having sum(sal)>10000;
++--------+----------+
+| deptno | sum(sal) |
++--------+----------+
+|     20 | 11552.50 |
+|     30 | 10340.00 |
++--------+----------+
+2 rows in set (0.00 sec)
+-----------------------------------------------------
+job wise ssum of salary if the sum salry is > 6000. exclude dept 30.
+mysql> select deptno, sum(sal) from emp where deptno <> 30 group by deptno having sum(sal)>6000;
++--------+----------+
+| deptno | sum(sal) |
++--------+----------+
+|     20 | 11552.50 |
+|     10 |  9625.00 |
++--------+----------+
+2 rows in set (0.00 sec)
+----------------------------------------------------
+job wise max sal only for managers, clerk, salesman working in dept 10 and 20 sort data by des order pf max salary
+mysql> select job, max(sal) from emp where job in ('manager','clerk','salesman') and deptno in (10,20) group by job order by max(sal) desc;
++---------+----------+
+| job     | max(sal) |
++---------+----------+
+| MANAGER |  3272.50 |
+| CLERK   |  1430.00 |
++---------+----------+
+2 rows in set (0.00 sec)
+--------------------------------------------------------------
+job wise number of employee in all the depart with total sal > 5000.
+mysql> select job,sum(sal) from emp group by job having sum(sal) > 5000;
++-----------+----------+
+| job       | sum(sal) |
++-----------+----------+
+| SALESMAN  |  6160.00 |
+| MANAGER   |  9102.50 |
+| ANALYST   |  6300.00 |
+| PRESIDENT |  5500.00 |
++-----------+----------+
+4 rows in set (0.00 sec)
+------------------------------------------------------------

@@ -1,0 +1,70 @@
+consider following table
+	order_master(oid,pname,qty,price)
+	oid : pk auto inc
+	order_log(oid,odate,amt)
+write a trigger which will create a log of all orders once order is placed.
+-----------------------------------------------------------------------------------------------------
+mysql> create table order_master(oid int primary key auto_increment,pname varchar(20),qty int,price int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table order_log(oid int,odate date,amt int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into order_master values(101,"pen",20,40);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from order_master;
++-----+-------+------+-------+
+| oid | pname | qty  | price |
++-----+-------+------+-------+
+| 101 | pen   |   20 |    40 |
++-----+-------+------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from order_log;
+Empty set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------
+delimiter //
+create trigger tri3
+after insert 
+on order_master
+for each row
+begin
+	insert into order_log(oid,odate,amt)
+	values(new.oid,curdate(),new.price*new.qty);
+end//
+delimiter ;
+------------------------------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create trigger tri3
+    -> after insert
+    -> on order_master
+    -> for each row
+    -> begin
+    ->  insert into order_log(oid,odate,amt)
+    ->  values(new.oid,curdate(),new.price*new.qty);
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> insert into order_master values(102,"pencil",10,30);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from order_master;
++-----+--------+------+-------+
+| oid | pname  | qty  | price |
++-----+--------+------+-------+
+| 101 | pen    |   20 |    40 |
+| 102 | pencil |   10 |    30 |
++-----+--------+------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from order_log;
++------+------------+------+
+| oid  | odate      | amt  |
++------+------------+------+
+|  102 | 2025-04-10 |  300 |
++------+------------+------+
+1 row in set (0.00 sec)
+
+

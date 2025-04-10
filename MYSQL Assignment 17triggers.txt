@@ -1,0 +1,219 @@
+consider following tables 
+product(pid,pname,price,qty)
+product_details(pid,amt)
+amt = product.price * qty
+write a trigger which will calculate amt every time any update is done the price of an item.
+-------------------------------------------------------------------------------------------------------------------
+mysql> create table product_details(pid int,amt float);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from product_details;
+Empty set (0.00 sec)
+
+mysql> desc product_details;
++-------+-------+------+-----+---------+-------+
+| Field | Type  | Null | Key | Default | Extra |
++-------+-------+------+-----+---------+-------+
+| pid   | int   | YES  |     | NULL    |       |
+| amt   | float | YES  |     | NULL    |       |
++-------+-------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+-----------------------------------------------------------------------------------------------------------------------
+delimiter //
+create trigger tri1
+after update 
+on product 
+for each row
+begin 
+	if new.price <> old.price
+	then 
+		INSERT INTO product_details (pid, amt)
+    		VALUES (NEW.pid, NEW.price * NEW.qty);
+	end if;
+end //
+delimiter ;
+------------------------------------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create trigger tri1
+    -> after update
+    -> on product
+    -> for each row
+    -> begin
+    ->  if new.price <> old.price
+    ->  then
+    ->          INSERT INTO product_details (pid, amt)
+    ->                  VALUES (NEW.pid, NEW.price * NEW.qty);
+    ->  end if;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+mysql> delimiter ;
+-------------------------------------------------------------------------------
+
+mysql> update product set price=35.00 where pid=167;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+---------------------------------------------------------------------
+mysql> select * from product;
++-----+-------------+-------+------+------+------+
+| pid | pname       | price | qty  | cid  | sid  |
++-----+-------------+-------+------+------+------+
+| 111 | pepsi       | 40.00 |   50 |    4 |   11 |
+| 123 | lays        | 30.00 |   30 |    1 |   12 |
+| 124 | dairy milk  | 40.00 |   60 |    2 |   14 |
+| 125 | pringles    | 40.00 |   60 |    1 |   14 |
+| 134 | nachos      | 50.00 |   50 |    1 |   12 |
+| 167 | eraser      | 35.00 |    5 | NULL | NULL |
+| 213 | sketch pens | 56.00 |  150 | NULL |   11 |
++-----+-------------+-------+------+------+------+
+7 rows in set (0.00 sec)
+---------------------------------------------------------------
+mysql> select * from product_details;
++------+------+
+| pid  | amt  |
++------+------+
+|  167 |  175 |
++------+------+
+1 row in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------
+consider following table,
+emp_wage(eno,ename,sal,over_time)
+eno:pk quto inc
+write a trigger which will insert over_time as 400 if value of over_time entered is null.
+-----------------------------------------------------------------------------------------------------
+mysql> create table emp_wage(eno int primary key auto_increment,ename varchar(15),sal int,over_time int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc emp_wage;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| eno       | int         | NO   | PRI | NULL    | auto_increment |
+| ename     | varchar(15) | YES  |     | NULL    |                |
+| sal       | int         | YES  |     | NULL    |                |
+| over_time | int         | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> insert into emp_wage(ename,sal,over_time)
+    -> values('sumit',1200,300);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp_wage;
++-----+-------+------+-----------+
+| eno | ename | sal  | over_time |
++-----+-------+------+-----------+
+|   1 | sumit | 1200 |       300 |
++-----+-------+------+-----------+
+1 row in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------
+delimiter //
+create trigger tri2
+before insert
+on emp_wage
+for each row
+begin 
+	if new.over_time is null
+	then 
+		set new.over_time = 400;
+	end if;
+end //
+delimiter ;
+-------------------------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create trigger tri2
+    -> before insert
+    -> on emp_wage
+    -> for each row
+    -> begin
+    ->  if new.over_time is null
+    ->  then
+    ->          set new.over_time = 400;
+    ->  end if;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> insert into emp_wage(ename,sal,over_time)
+    -> values('Geeta',2200,null);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from emp_wage;
++-----+-------+------+-----------+
+| eno | ename | sal  | over_time |
++-----+-------+------+-----------+
+|   1 | sumit | 1200 |       300 |
+|   2 | Geeta | 2200 |       400 |
++-----+-------+------+-----------+
+2 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------------
+consider following table
+	order_master(oid,pname,qty,price)
+	oid : pk auto inc
+	order_log(oid,odate,amt)
+write a trigger which will create a log of all orders once order is placed.
+-----------------------------------------------------------------------------------------------------
+mysql> create table order_master(oid int primary key auto_increment,pname varchar(20),qty int,price int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table order_log(oid int,odate date,amt int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into order_master values(101,"pen",20,40);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from order_master;
++-----+-------+------+-------+
+| oid | pname | qty  | price |
++-----+-------+------+-------+
+| 101 | pen   |   20 |    40 |
++-----+-------+------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from order_log;
+Empty set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------
+delimiter //
+create trigger tri3
+after insert 
+on order_master
+for each row
+begin
+	insert into order_log(oid,odate,amt)
+	values(new.oid,curdate(),new.price*new.qty);
+end//
+delimiter ;
+------------------------------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create trigger tri3
+    -> after insert
+    -> on order_master
+    -> for each row
+    -> begin
+    ->  insert into order_log(oid,odate,amt)
+    ->  values(new.oid,curdate(),new.price*new.qty);
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> insert into order_master values(102,"pencil",10,30);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from order_master;
++-----+--------+------+-------+
+| oid | pname  | qty  | price |
++-----+--------+------+-------+
+| 101 | pen    |   20 |    40 |
+| 102 | pencil |   10 |    30 |
++-----+--------+------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from order_log;
++------+------------+------+
+| oid  | odate      | amt  |
++------+------------+------+
+|  102 | 2025-04-10 |  300 |
++------+------------+------+
+1 row in set (0.00 sec)
+
+
+

@@ -1,0 +1,108 @@
+***************************************IMP***********************************************************
+mysql> set global log_bin_trust_function_creators=1;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+--------------------------------------------------------------------------------------------------------------
+
+Q no 1. write a function to calculate total salary of an employee. call the function in select clause.
+total sal = sal+comm.
+--------------------------------------------------------------------------------------------------------------------
+delimiter //
+create function fun1(a decimal(7,2), b decimal(7,2)) returns decimal(7,2)
+begin
+	declare total_sal decimal(7,2);
+	
+	set total_sal = a+ifnull(b,0);
+	return total_sal;
+end //
+delimiter ;
+------------------------------------------------------
+select fun1(sal,comm)
+from emp;
+-------------------------------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create function fun1(a decimal(7,2), b decimal(7,2)) returns decimal(7,2)
+    -> begin
+    ->  declare total_sal decimal(7,2);
+    ->
+    ->  set total_sal = a+ifnull(b,0);
+    ->  return total_sal;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+-------------------------------------------------
+mysql> select fun1(sal,comm)
+    -> from emp;
++----------------+
+| fun1(sal,comm) |
++----------------+
+|       10300.00 |
+|           NULL |
+|         880.00 |
+|        2060.00 |
+|        1875.00 |
+|        3272.50 |
+|        2775.00 |
+|        3135.00 |
+|        2695.00 |
+|        3000.00 |
+|        5500.00 |
+|        1650.00 |
+|        1100.00 |
+|        1045.00 |
+|        3300.00 |
+|        1430.00 |
++----------------+
+16 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------------
+Q 2. write a function to generate an email. call the function in select clause.email is generated as follows first 2 letters of name + last 2 letters of job @knowit.com
+----------------------------------------------------------------------------------------------------------------------
+delimiter //
+create function fun2(a varchar(20), b varchar(20)) returns varchar(30)
+begin 
+	declare emil varchar(30);
+	
+	set emil = concat(lower(substr(a,1,2)),lower(substr(b,-2,2)),'@knowit.com');
+	return emil;
+end //
+delimiter ; 
+--------------------------------------------
+select ename,job,fun2(ename,job)
+from emp;
+---------------------------------------------------------------------------------------------------------------------
+mysql> delimiter //
+mysql> create function fun2(a varchar(20), b varchar(20)) returns varchar(30)
+    -> begin
+    ->  declare emil varchar(30);
+    ->
+    ->  set emil = concat(lower(substr(a,1,2)),lower(substr(b,-2,2)),'@knowit.com');
+    ->  return emil;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+-----------------------------------------------------------------------------------------------------------------------
+mysql> select ename,job,fun2(ename,job)
+    -> from emp;
++--------+-----------+-----------------+
+| ename  | job       | fun2(ename,job) |
++--------+-----------+-----------------+
+| geeta  | NULL      | NULL            |
+| Raj    | Analyst   | rast@knowit.com |
+| SMITH  | CLERK     | smrk@knowit.com |
+| ALLEN  | SALESMAN  | alan@knowit.com |
+| WARD   | SALESMAN  | waan@knowit.com |
+| JONES  | MANAGER   | joer@knowit.com |
+| MARTIN | SALESMAN  | maan@knowit.com |
+| BLAKE  | MANAGER   | bler@knowit.com |
+| CLARK  | MANAGER   | cler@knowit.com |
+| SCOTT  | ANALYST   | scst@knowit.com |
+| KING   | PRESIDENT | kint@knowit.com |
+| TURNER | SALESMAN  | tuan@knowit.com |
+| ADAMS  | CLERK     | adrk@knowit.com |
+| JAMES  | CLERK     | jark@knowit.com |
+| FORD   | ANALYST   | fost@knowit.com |
+| MILLER | CLERK     | mirk@knowit.com |
++--------+-----------+-----------------+
+16 rows in set (0.00 sec)
+-----------------------------------------------------------------------------------------------------------------------

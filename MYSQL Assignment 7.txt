@@ -1,0 +1,165 @@
+mysql> create table course( cid varchar(10),
+				cname varchar(20) unique not null, 
+				fees int default 5000 , 
+				constraint pk_cid primary key(cid)
+			 );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> describe course;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cid   | varchar(10) | NO   | PRI | NULL    |       |
+| cname | varchar(20) | NO   | UNI | NULL    |       |
+| fees  | int         | YES  |     | 5000    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+-------------------------------------
+
+mysql> create table trainer ( tid varchar(10), 
+			tname varchar(20) not null, 
+			cid varchar(10), 
+			salary int default 20000, 
+			experience INT CHECK (experience >= 10), 
+			constraint pk_tid primary key(tid), 
+			constraint fk_cid foreign key(cid) 
+			references course(cid) on delete set null);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> describe trainer;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| tid        | varchar(10) | NO   | PRI | NULL    |       |
+| tname      | varchar(20) | NO   |     | NULL    |       |
+| cid        | varchar(10) | YES  | MUL | NULL    |       |
+| salary     | int         | YES  |     | 20000   |       |
+| experience | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+********************* try code ********************************
+mysql> alter table trainer modify column tid varchar(10);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe trainer;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| tid        | varchar(10) | NO   | PRI | NULL    |       |
+| tname      | varchar(20) | NO   |     | NULL    |       |
+| cid        | int         | YES  | MUL | NULL    |       |
+| salary     | int         | YES  |     | 20000   |       |
+| experience | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+*********************************************************************
+mysql> insert into course values('c1', 'coe_java',7000),('c2', 'Linux',8000),('c3', 'data_structure' ,10000),('c4', 'python',12000),('c5', 'Dot_net',null);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from course;
++-----+----------------+-------+
+| cid | cname          | fees  |
++-----+----------------+-------+
+| c1  | coe_java       |  7000 |
+| c2  | Linux          |  8000 |
+| c3  | data_structure | 10000 |
+| c4  | python         | 12000 |
+| c5  | Dot_net        |  NULL |
++-----+----------------+-------+
+5 rows in set (0.00 sec)
+---------------------------------------
+mysql> INSERT INTO trainer VALUES('t1','amit','c2',1000,10),('t2','rajan','c1',2000,11),('t3','shruti','c2',3000,12),('t4','arti','c2',4000,13),('t5','sameer','c3',5000,11),('t6','sanjay',NULL,6000,20),('t7','soha',NULL,7000,14);
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from trainer;
++-----+--------+------+--------+------------+
+| tid | tname  | cid  | salary | experience |
++-----+--------+------+--------+------------+
+| t1  | amit   | c2   |   1000 |         10 |
+| t2  | rajan  | c1   |   2000 |         11 |
+| t3  | shruti | c2   |   3000 |         12 |
+| t4  | arti   | c2   |   4000 |         13 |
+| t5  | sameer | c3   |   5000 |         11 |
+| t6  | sanjay | NULL |   6000 |         20 |
+| t7  | soha   | NULL |   7000 |         14 |
++-----+--------+------+--------+------------+
+7 rows in set (0.00 sec)
+-------------------------------------------------
+ INSERT INTO trainer VALUES('t2','mahesh',null,16000,12);
+mysql>  INSERT INTO trainer VALUES('t2','mahesh',null,16000,12);
+ERROR 1062 (23000): Duplicate entry 't2' for key 'trainer.PRIMARY'
+
+ INSERT INTO trainer VALUES('t8','meena','c3',25000,11);
+mysql>  INSERT INTO trainer VALUES('t8','meena','c3',25000,11);
+Query OK, 1 row affected (0.01 sec)
+
+ INSERT INTO trainer VALUES('t9',null,'c2',30000,10);
+mysql>  INSERT INTO trainer VALUES('t9',null,'c2',30000,10);
+ERROR 1048 (23000): Column 'tname' cannot be null
+
+ INSERT INTO trainer VALUES('t10','soham','c2',35000,8);
+mysql>  INSERT INTO trainer VALUES('t10','soham','c2',35000,8);
+ERROR 3819 (HY000): Check constraint 'trainer_chk_1' is violated.
+
+ INSERT INTO trainer VALUES('t11','anil','c3',null,11);
+mysql>  INSERT INTO trainer VALUES('t11','anil','c3',null,11);
+Query OK, 1 row affected (0.00 sec)
+-----------------------------------------------------------------
+mysql>  delete from course where cid='c2';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from course;
++-----+----------------+-------+
+| cid | cname          | fees  |
++-----+----------------+-------+
+| c1  | coe_java       |  7000 |
+| c3  | data_structure | 10000 |
+| c4  | python         | 12000 |
+| c5  | Dot_net        |  NULL |
++-----+----------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from trainer;
++-----+--------+------+--------+------------+
+| tid | tname  | cid  | salary | experience |
++-----+--------+------+--------+------------+
+| t1  | amit   | NULL |   1000 |         10 |
+| t2  | rajan  | c1   |   2000 |         11 |
+| t3  | shruti | NULL |   3000 |         12 |
+| t4  | arti   | NULL |   4000 |         13 |
+| t5  | sameer | c3   |   5000 |         11 |
+| t6  | sanjay | NULL |   6000 |         20 |
+| t7  | soha   | NULL |   7000 |         14 |
++-----+--------+------+--------+------------+
+7 rows in set (0.00 sec)
+----------------------------------------------------------------
+mysql> drop table trainer;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from trainer;
+ERROR 1146 (42S02): Table 'office.trainer' doesn't exist
+--------------------------------------------------------------------
+create table trainer ( tid varchar(10), 
+			tname varchar(20) not null, 
+			cid varchar(10), 
+			salary int default 20000 , 
+			experience INT CHECK (experience >= 10), 
+			constraint pk_tid primary key(tid), 
+			constraint fk_cid foreign key(cid) 
+			references course(cid) on delete cascade);
+----------------------------------
+
+mysql> select * from trainer;
+Empty set (0.00 sec)
+------------------------------
+mysql> insert into course values('c2', 'Linux',8000);
+Query OK, 1 row affected (0.01 sec)
+------------------------
+mysql> INSERT INTO trainer VALUES('t1','amit','c2',1000,10),('t2','rajan','c1',2000,11),('t3','shruti','c2',3000,12),('t4','arti','c2',4000,13),('t5','sameer','c3',5000,11),('t6','sanjay',NULL,6000,20),('t7','soha',NULL,7000,14);
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+-------------------------------------
+

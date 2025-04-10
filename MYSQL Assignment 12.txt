@@ -1,0 +1,208 @@
+Q no:1 create a view emp_view having following columns
+empno, ename,deptno,sal,comm
+--------------------------------------------------------------------------------------------------------------
+create view emp_view 
+as
+select empno "no",ename "name",deptno "Dept",sal "salary",comm "commi"
+from emp;
+----------------------------------------------------------------------------------------------------------
+mysql> create view emp_view
+    -> as
+    -> select empno "no",ename "name",deptno "Dept",sal "salary",comm "commi"
+    -> from emp;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from emp_view;
++------+--------+------+---------+---------+
+| no   | name   | Dept | salary  | commi   |
++------+--------+------+---------+---------+
+| 7369 | SMITH  |   20 |  880.00 |    NULL |
+| 7499 | ALLEN  |   30 | 1760.00 |  300.00 |
+| 7521 | WARD   |   30 | 1375.00 |  500.00 |
+| 7566 | JONES  |   20 | 3272.50 |    NULL |
+| 7654 | MARTIN |   30 | 1375.00 | 1400.00 |
+| 7698 | BLAKE  |   30 | 3135.00 |    NULL |
+| 7782 | CLARK  |   10 | 2695.00 |    NULL |
+| 7788 | SCOTT  |   20 | 3000.00 |    NULL |
+| 7839 | KING   |   10 | 5500.00 |    NULL |
+| 7844 | TURNER |   30 | 1650.00 |    0.00 |
+| 7876 | ADAMS  |   20 | 1100.00 |    NULL |
+| 7900 | JAMES  |   30 | 1045.00 |    NULL |
+| 7902 | FORD   |   20 | 3300.00 |    NULL |
+| 7934 | MILLER |   10 | 1430.00 |    NULL |
++------+--------+------+---------+---------+
+14 rows in set (0.00 sec)
+--------------------------------------------------------------------------------------------------------
+Q no 2: insert new employee having following information in the view (1111,'geeta',20,10000,300) 
+check the data inserted in the view as well as the base table.
+----------------------------------------------------------------------------------------------------------------
+insert into emp_view values (1111,'geeta',20,10000,300);
+-------------------------------------------------------------------------------------------------------------
+mysql> insert into emp_view values (1111,'geeta',20,10000,300);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp_view;
++------+--------+------+----------+---------+
+| no   | name   | Dept | salary   | commi   |
++------+--------+------+----------+---------+
+| 7369 | SMITH  |   20 |   880.00 |    NULL |
+| 7499 | ALLEN  |   30 |  1760.00 |  300.00 |
+| 7521 | WARD   |   30 |  1375.00 |  500.00 |
+| 7566 | JONES  |   20 |  3272.50 |    NULL |
+| 7654 | MARTIN |   30 |  1375.00 | 1400.00 |
+| 7698 | BLAKE  |   30 |  3135.00 |    NULL |
+| 7782 | CLARK  |   10 |  2695.00 |    NULL |
+| 7788 | SCOTT  |   20 |  3000.00 |    NULL |
+| 7839 | KING   |   10 |  5500.00 |    NULL |
+| 7844 | TURNER |   30 |  1650.00 |    0.00 |
+| 7876 | ADAMS  |   20 |  1100.00 |    NULL |
+| 7900 | JAMES  |   30 |  1045.00 |    NULL |
+| 7902 | FORD   |   20 |  3300.00 |    NULL |
+| 7934 | MILLER |   10 |  1430.00 |    NULL |
+| 1111 | geeta  |   20 | 10000.00 |  300.00 |
++------+--------+------+----------+---------+
+15 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------------
+create a view for deptno 20 as emp_v20 having following columns. this view should contain rows from dept20 only empno,ename,deptno,job.
+-------------------------------------------------------------------------------------------------------------------
+create view emp_v20
+as 
+select empno,ename,deptno,job
+from emp
+where deptno=20;
+------------------------------------------------------------------------------
+mysql> create view emp_v20
+    -> as
+    -> select empno,ename,deptno,job
+    -> from emp
+    -> where deptno=20;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from emp_V20;
++-------+-------+--------+---------+
+| empno | ename | deptno | job     |
++-------+-------+--------+---------+
+|  7369 | SMITH |     20 | CLERK   |
+|  7566 | JONES |     20 | MANAGER |
+|  7788 | SCOTT |     20 | ANALYST |
+|  7876 | ADAMS |     20 | CLERK   |
+|  7902 | FORD  |     20 | ANALYST |
+|  1111 | geeta |     20 | NULL    |
++-------+-------+--------+---------+
+6 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------------------------
+Q no 4: insert new employee in view emp_v20 having following information.
+(2222,'Raj',40,'Analyst')
+check data inserted in the base table emp and elso in the view.
+-----------------------------------------------------------------------------------
+insert into emp_v20 values (2222,'Raj',40,'Analyst');
+----------------------------------------------------------------
+mysql> insert into emp_v20 values (2222,'Raj',40,'Analyst');
+Query OK, 1 row affected (0.00 sec)
+mysql> select * from emp_V20;
++-------+-------+--------+---------+
+| empno | ename | deptno | job     |
++-------+-------+--------+---------+
+|  7369 | SMITH |     20 | CLERK   |
+|  7566 | JONES |     20 | MANAGER |
+|  7788 | SCOTT |     20 | ANALYST |
+|  7876 | ADAMS |     20 | CLERK   |
+|  7902 | FORD  |     20 | ANALYST |
+|  1111 | geeta |     20 | NULL    |
++-------+-------+--------+---------+
+6 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------
+Q  no 5:create a view for deptno20 as new_emp_v20 having following columns empno,ename,deptno,job with constraint 'check option';
+----------------------------------------------------------------------------------------------------------------
+create view new_emp_v20 
+as 
+select empno,ename,deptno,job
+from emp
+where deptno=20
+with check option;
+------------------------------------------------------
+mysql> create view new_emp_v20
+    -> as
+    -> select empno,ename,deptno,job
+    -> from emp
+    -> where deptno=20
+    -> with check option;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from new_emp_v20;
++-------+-------+--------+---------+
+| empno | ename | deptno | job     |
++-------+-------+--------+---------+
+|  7369 | SMITH |     20 | CLERK   |
+|  7566 | JONES |     20 | MANAGER |
+|  7788 | SCOTT |     20 | ANALYST |
+|  7876 | ADAMS |     20 | CLERK   |
+|  7902 | FORD  |     20 | ANALYST |
+|  1111 | geeta |     20 | NULL    |
++-------+-------+--------+---------+
+6 rows in set (0.00 sec)
+--------------------------------------------------------------------------------------------------------------------
+
+ Q no 6: insert new employee in view new_emp_v20 having following information.
+(2222,'Raj',40,'Analyst')
+check data inserted in the base table emp and elso in the view.
+-----------------------------------------------------------------------------------
+insert into new_emp_v20 values (2222,'Raj',40,'Analyst');
+--------------------------------------------------------
+mysql> insert into new_emp_v20 values (2222,'Raj',40,'Analyst');
+ERROR 1369 (HY000): CHECK OPTION failed 'office.new_emp_v20'
+--------------------------------------------------------------------------------------------------------------------
+Q no 7: check the views created.
+--------------------------------------------------------------------------------------------------------
+show full tables from office where table_type = 'VIEW';
+---------------------------------------------------------------------------------------------------
+mysql> show full tables from office where table_type = 'VIEW';
++------------------+------------+
+| Tables_in_office | Table_type |
++------------------+------------+
+| emp_v20          | VIEW       |
+| emp_view         | VIEW       |
+| new_emp_v20      | VIEW       |
++------------------+------------+
+3 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------------
+Q no 8: Create a view with columns as empno,ename,deptno and dname.
+check if you can enter the data in the above view.
+--------------------------------------------------------------------------------------------
+create view v1
+as 
+select e.empno,e.ename,e.deptno,d.dname
+from emp e
+join dept d
+on e.deptno = d.deptno;
+---------------------------------------------------------------------------------------------------------
+mysql> create view v1
+    -> as
+    -> select e.empno,e.ename,e.deptno,d.dname
+    -> from emp e
+    -> join dept d
+    -> on e.deptno = d.deptno;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from v1;
++-------+--------+--------+------------+
+| empno | ename  | deptno | dname      |
++-------+--------+--------+------------+
+|  7369 | SMITH  |     20 | RESEARCH   |
+|  7499 | ALLEN  |     30 | SALES      |
+|  7521 | WARD   |     30 | SALES      |
+|  7566 | JONES  |     20 | RESEARCH   |
+|  7654 | MARTIN |     30 | SALES      |
+|  7698 | BLAKE  |     30 | SALES      |
+|  7782 | CLARK  |     10 | ACCOUNTING |
+|  7788 | SCOTT  |     20 | RESEARCH   |
+|  7839 | KING   |     10 | ACCOUNTING |
+|  7844 | TURNER |     30 | SALES      |
+|  7876 | ADAMS  |     20 | RESEARCH   |
+|  7900 | JAMES  |     30 | SALES      |
+|  7902 | FORD   |     20 | RESEARCH   |
+|  7934 | MILLER |     10 | ACCOUNTING |
+|  1111 | geeta  |     20 | RESEARCH   |
+|  2222 | Raj    |     40 | OPERATIONS |
++-------+--------+--------+------------+
+16 rows in set (0.00 sec)
